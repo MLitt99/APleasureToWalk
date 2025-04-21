@@ -1,5 +1,5 @@
 /**
- * Paws & Paths - Dog Walking Business Website
+ * A Pleasure To Walk - Dog Walking Business Website
  * Scroll Effects and Navigation
  */
 

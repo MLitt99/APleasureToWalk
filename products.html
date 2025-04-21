@@ -1,0 +1,774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Pleasure To Walk - Dog Training Products</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Floating Category Menu */
+        .floating-category-menu {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background-color: white;
+            border-radius: 30px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--background-alt, #f5f5f5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-color, #333);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .category-icon:hover, .category-icon.active {
+            background-color: var(--primary-color, #4CAF50);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .category-icon .tooltip {
+            position: absolute;
+            left: 60px;
+            background-color: var(--primary-color, #4CAF50);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .category-icon .tooltip:after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -5px;
+            transform: translateY(-50%);
+            border-width: 5px 5px 5px 0;
+            border-style: solid;
+            border-color: transparent var(--primary-color, #4CAF50) transparent transparent;
+        }
+        
+        .category-icon:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            left: 65px;
+        }
+        
+        /* Responsive adjustments for floating menu */
+        @media (max-width: 768px) {
+            .floating-category-menu {
+                left: 10px;
+                padding: 10px 5px;
+            }
+            
+            .category-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        }
+        
+        /* Product Card Styles */
+        .product-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            background-color: white;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .product-img-container {
+            height: 200px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+        }
+        
+        .product-img {
+            max-height: 100%;
+            max-width: 100%;
+            object-fit: contain;
+        }
+        
+        .product-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            color: #adb5bd;
+        }
+        
+        .product-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-info {
+            padding: 1.5rem;
+        }
+        
+        .product-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-price {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .product-description {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        .category-title {
+            position: relative;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .category-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Category Menu -->
+    <div class="floating-category-menu">
+        <a href="#leashes" class="category-icon" data-category="leashes">
+            <i class="fas fa-dog"></i>
+            <span class="tooltip">Leashes</span>
+        </a>
+        <a href="#collars" class="category-icon" data-category="collars">
+            <i class="fas fa-circle"></i>
+            <span class="tooltip">Collars</span>
+        </a>
+        <a href="#training-aids" class="category-icon" data-category="training-aids">
+            <i class="fas fa-bullhorn"></i>
+            <span class="tooltip">Training Aids</span>
+        </a>
+        <a href="#treats" class="category-icon" data-category="treats">
+            <i class="fas fa-bone"></i>
+            <span class="tooltip">Treats</span>
+        </a>
+        <a href="#grooming" class="category-icon" data-category="grooming">
+            <i class="fas fa-cut"></i>
+            <span class="tooltip">Grooming</span>
+        </a>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">A Pleasure To Walk</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#faq">FAQ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#booking">Book Now</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#social">Social</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Products Header Section -->
+    <section class="section" style="padding-top: 120px;">
+        <div class="container">
+            <div class="section-header text-center fade-in">
+                <h1>Training Products</h1>
+                <p class="lead">Quality tools to support your dog's training journey</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leashes Section -->
+    <section id="leashes" class="section bg-light">
+        <div class="container">
+            <h2 class="category-title fade-in">Leashes</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-dog"></i>
+                                <p>Training Leash Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Professional Training Leash</h3>
+                            <p class="product-price">$35.99</p>
+                            <p class="product-description">Our premium 6ft training leash provides the perfect balance of control and freedom. Made from durable nylon with a comfortable padded handle and reflective stitching for night safety.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-dog"></i>
+                                <p>Double-Handle Leash Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Double-Handle Control Leash</h3>
+                            <p class="product-price">$42.99</p>
+                            <p class="product-description">Featuring two padded handles - one near the collar for close control in high-traffic areas, and one at the end for regular walking. Perfect for reactive dogs or training situations.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-dog"></i>
+                                <p>Long Line Leash Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Long Line Training Lead</h3>
+                            <p class="product-price">$29.99</p>
+                            <p class="product-description">This 15ft long line is perfect for recall training and giving your dog more freedom while maintaining control. Lightweight but strong with a comfortable hand loop.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Collars Section -->
+    <section id="collars" class="section">
+        <div class="container">
+            <h2 class="category-title fade-in">Collars</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-dog"></i>
+                                <p>Martingale Collar Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Martingale Training Collar</h3>
+                            <p class="product-price">$28.99</p>
+                            <p class="product-description">A humane training collar that provides gentle control without choking. Perfect for dogs who tend to slip out of regular collars or need mild correction during walks.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-dog"></i>
+                                <p>Reflective Collar Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Reflective Safety Collar</h3>
+                            <p class="product-price">$24.99</p>
+                            <p class="product-description">Highly visible reflective collar for safe evening walks. Made from durable nylon with strong hardware and an easy-release buckle. Available in multiple sizes and colors.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-dog"></i>
+                                <p>Front-Clip Harness Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">No-Pull Front-Clip Harness</h3>
+                            <p class="product-price">$38.99</p>
+                            <p class="product-description">Designed to discourage pulling by redirecting your dog's forward motion. Features front and back attachment points, padded chest plate, and adjustable straps for a perfect fit.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Remote Training Aids Section -->
+    <section id="training-aids" class="section bg-light">
+        <div class="container">
+            <h2 class="category-title fade-in">Remote Training Aids</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-dog"></i>
+                                <p>Training Clicker Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Professional Training Clicker</h3>
+                            <p class="product-price">$8.99</p>
+                            <p class="product-description">A precise training tool that makes a distinct clicking sound to mark desired behaviors. Includes wrist strap and training guide for positive reinforcement techniques.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-dog"></i>
+                                <p>Ultrasonic Trainer Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Ultrasonic Training Device</h3>
+                            <p class="product-price">$22.99</p>
+                            <p class="product-description">Emits an ultrasonic tone that gets your dog's attention without startling them. Features multiple tones for different commands and a built-in LED light for night use.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-dog"></i>
+                                <p>Vibration Collar Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Vibration Training Collar</h3>
+                            <p class="product-price">$65.99</p>
+                            <p class="product-description">Humane training collar with vibration mode only (no shock). Features adjustable intensity levels, 300-yard range, and rechargeable battery. Includes comprehensive training guide.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Treats Section -->
+    <section id="treats" class="section">
+        <div class="container">
+            <h2 class="category-title fade-in">Training Treats</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-bone"></i>
+                                <p>Soft Treats Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Soft Training Treats</h3>
+                            <p class="product-price">$12.99</p>
+                            <p class="product-description">Small, soft treats perfect for quick rewards during training sessions. Low-calorie and made with real chicken. Comes in a resealable bag with approximately 200 treats.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-bone"></i>
+                                <p>Treat Pouch Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Professional Treat Pouch</h3>
+                            <p class="product-price">$18.99</p>
+                            <p class="product-description">Hands-free treat pouch with magnetic closure for quick access. Features adjustable belt, built-in waste bag dispenser, and separate pocket for keys or phone.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-bone"></i>
+                                <p>Freeze-Dried Treats Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Freeze-Dried Liver Treats</h3>
+                            <p class="product-price">$15.99</p>
+                            <p class="product-description">High-value training treats made from 100% pure freeze-dried beef liver. Can be broken into smaller pieces for extended training sessions. No additives or preservatives.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grooming Tools Section -->
+    <section id="grooming" class="section bg-light">
+        <div class="container">
+            <h2 class="category-title fade-in">Grooming Tools</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-cut"></i>
+                                <p>Slicker Brush Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Professional Slicker Brush</h3>
+                            <p class="product-price">$19.99</p>
+                            <p class="product-description">Removes loose fur, mats, and tangles with fine, angled bristles. Ergonomic handle reduces wrist strain during grooming sessions. Suitable for all coat types.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-cut"></i>
+                                <p>Nail Clippers Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Safety Nail Clippers</h3>
+                            <p class="product-price">$14.99</p>
+                            <p class="product-description">Professional-grade nail clippers with safety guard to prevent over-cutting. Sharp stainless steel blades make clean cuts with minimal pressure. Includes nail file.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="product-card fade-in">
+                        <div class="product-img-container">
+                            <div class="product-placeholder">
+                                <i class="fas fa-cut"></i>
+                                <p>Deshedding Tool Image</p>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">Deshedding Tool</h3>
+                            <p class="product-price">$27.99</p>
+                            <p class="product-description">Reduces shedding by up to 90% by removing loose undercoat hair. Stainless steel edge reaches deep without damaging topcoat. Ergonomic handle for comfortable use.</p>
+                            <button class="btn btn-primary btn-sm">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center fade-in">
+                    <h2>Complete Your Training Experience</h2>
+                    <p class="lead mb-4">Pair our professional training services with quality products for the best results.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="index.html#booking" class="btn btn-primary">Book a Training Session</a>
+                        <a href="index.html#contact" class="btn btn-outline-primary">Contact Us</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h4>A Pleasure To Walk</h4>
+                    <p>Professional dog behavioral training with a personal touch.</p>
+                </div>
+                <div class="col-md-4">
+                    <h4>Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html#home">Home</a></li>
+                        <li><a href="index.html#services">Services</a></li>
+                        <li><a href="products.html">Products</a></li>
+                        <li><a href="index.html#faq">FAQ</a></li>
+                        <li><a href="index.html#booking">Book a Training</a></li>
+                        <li><a href="index.html#social">Social</a></li>
+                        <li><a href="index.html#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h4>Follow Us</h4>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col-12 text-center">
+                    <p class="copyright">© 2025 A Pleasure To Walk. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="js/main.js"></script>
+    <script src="js/scroll.js"></script>
+    
+    <script>
+        // Initialize animations for fade-in elements
+        document.addEventListener('DOMContentLoaded', function() {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            fadeElements.forEach(element => {
+                observer.observe(element);
+            });
+            
+            // Initialize floating category menu
+            initFloatingCategoryMenu();
+        });
+        
+        /**
+         * Initialize the floating category menu
+         * Sets up smooth scrolling and active state tracking
+         */
+        function initFloatingCategoryMenu() {
+            // Get all category icons
+            const categoryIcons = document.querySelectorAll('.category-icon');
+            
+            // Get all product category sections
+            const categorySections = document.querySelectorAll('section[id]');
+            
+            // Add click event listeners to category icons for smooth scrolling
+            categoryIcons.forEach(icon => {
+                icon.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Get the target section ID from the href attribute
+                    const targetId = this.getAttribute('href');
+                    
+                    // Get the target element
+                    const targetElement = document.querySelector(targetId);
+                    
+                    // If the target element exists, scroll to it
+                    if (targetElement) {
+                        // Get the navbar height for offset
+                        const navbarHeight = document.querySelector('.navbar').offsetHeight;
+                        
+                        // Calculate the target position with offset
+                        const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+                        
+                        // Smooth scroll to the target
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                        
+                        // Update active icon
+                        updateActiveIcon(targetId.substring(1));
+                    }
+                });
+            });
+            
+            // Create an Intersection Observer to track which section is in view
+            const observerOptions = {
+                root: null,
+                rootMargin: '-20% 0px -70% 0px', // Adjust these values to control when the active state changes
+                threshold: 0
+            };
+            
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    // If the section is in the viewport
+                    if (entry.isIntersecting) {
+                        // Get the section ID
+                        const id = entry.target.getAttribute('id');
+                        // Update the active icon
+                        updateActiveIcon(id);
+                    }
+                });
+            }, observerOptions);
+            
+            // Observe each category section
+            categorySections.forEach(section => {
+                sectionObserver.observe(section);
+            });
+            
+            // Initial update of active icon based on scroll position
+            updateActiveIconOnScroll();
+            
+            // Update active icon on scroll (as a fallback)
+            window.addEventListener('scroll', throttle(updateActiveIconOnScroll, 100));
+        }
+        
+        /**
+         * Update the active icon based on section ID
+         * @param {string} sectionId - The ID of the active section
+         */
+        function updateActiveIcon(sectionId) {
+            // Remove active class from all icons
+            document.querySelectorAll('.category-icon').forEach(icon => {
+                icon.classList.remove('active');
+            });
+            
+            // Add active class to the matching icon
+            const activeIcon = document.querySelector(`.category-icon[data-category="${sectionId}"]`);
+            if (activeIcon) {
+                activeIcon.classList.add('active');
+            }
+        }
+        
+        /**
+         * Update active icon based on current scroll position
+         * This is a fallback for the Intersection Observer
+         */
+        function updateActiveIconOnScroll() {
+            // Get all category sections
+            const sections = document.querySelectorAll('section[id]');
+            
+            // Get the current scroll position
+            const scrollPosition = window.scrollY + window.innerHeight / 3;
+            
+            // Find the current section
+            for (let i = sections.length - 1; i >= 0; i--) {
+                const section = sections[i];
+                const sectionTop = section.offsetTop;
+                
+                if (scrollPosition >= sectionTop) {
+                    const id = section.getAttribute('id');
+                    updateActiveIcon(id);
+                    break;
+                }
+            }
+        }
+        
+        /**
+         * Throttle function to limit how often a function can be called
+         * @param {Function} func - The function to throttle
+         * @param {number} limit - The time limit in milliseconds
+         * @returns {Function} Throttled function
+         */
+        function throttle(func, limit) {
+            let inThrottle;
+            return function() {
+                const args = arguments;
+                const context = this;
+                if (!inThrottle) {
+                    func.apply(context, args);
+                    inThrottle = true;
+                    setTimeout(() => inThrottle = false, limit);
+                }
+            };
+        }
+    </script>
+</body>
+</html>

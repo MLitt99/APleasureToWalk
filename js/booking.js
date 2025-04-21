@@ -1,5 +1,5 @@
 /**
- * Paws & Paths - Dog Walking Business Website
+ * A Pleasure To Walk - Dog Walking Business Website
  * Booking System Logic
  */
 
@@ -47,7 +47,7 @@ function initializeCalendar() {
             todayHighlight: true,
             weekStart: 0, // Sunday
             daysOfWeekDisabled: [], // No disabled days
-            calendarWeeks: true, // Show week numbers
+            calendarWeeks: false, // Hide week numbers
             maxView: 1, // Month view only
             minView: 0, // Day view
             maxNumberOfDates: 1, // Single date selection
@@ -666,11 +666,24 @@ function updateAvailableTimeSlots(date) {
     const dateString = formatDateForStorage(date);
     const dateBookings = getBookingsForDate(dateString);
     
-    // Define available time slots
+    // Check if the date is a weekend
+    const dayOfWeek = date.getDay(); // 0 is Sunday, 6 is Saturday
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+    
+    // If it's a weekend, no slots are available
+    if (isWeekend) {
+        const noSlotsOption = document.createElement('option');
+        noSlotsOption.value = '';
+        noSlotsOption.disabled = true;
+        noSlotsOption.textContent = 'No appointments available on weekends';
+        timeSelect.appendChild(noSlotsOption);
+        return;
+    }
+    
+    // Define available time slots for weekdays
     const allTimeSlots = [
-        { value: 'morning', text: 'Morning (8:00 AM - 11:00 AM)' },
-        { value: 'afternoon', text: 'Afternoon (12:00 PM - 3:00 PM)' },
-        { value: 'evening', text: 'Evening (4:00 PM - 7:00 PM)' }
+        { value: 'morning', text: 'Morning (10:00 AM - 11:30 AM)' },
+        { value: 'afternoon', text: 'Afternoon (1:00 PM - 2:30 PM)' }
     ];
     
     // Filter out time slots that are already booked
@@ -940,7 +953,7 @@ function resetBookingForm() {
  */
 function loadExistingBookings() {
     // Get bookings from local storage
-    const storedBookings = localStorage.getItem('pawsAndPathsBookings');
+    const storedBookings = localStorage.getItem('aPleasureToWalkBookings');
     
     // Parse bookings if they exist
     if (storedBookings) {
@@ -962,7 +975,7 @@ function saveBooking(booking) {
     bookings.push(booking);
     
     // Save to local storage
-    localStorage.setItem('pawsAndPathsBookings', JSON.stringify(bookings));
+    localStorage.setItem('aPleasureToWalkBookings', JSON.stringify(bookings));
     
     console.log('Booking saved:', booking.id);
 }

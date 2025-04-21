@@ -1,23 +1,23 @@
 /**
- * Paws & Paths - Dog Walking Business Website
+ * A Pleasure To Walk - Dog Walking Business Website
  * Main JavaScript File
  */
 
 // Wait for the DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Paws & Paths website initialized');
+    console.log('A Pleasure To Walk website initialized');
     
     // Initialize all components
     initializeCarousel();
     initializeAnimations();
     
     // Set current year in footer copyright
-    document.querySelector('.copyright').innerHTML = `© ${new Date().getFullYear()} Paws & Paths. All rights reserved.`;
+    document.querySelector('.copyright').innerHTML = `© ${new Date().getFullYear()} A Pleasure To Walk. All rights reserved.`;
 });
 
 /**
  * Initialize the dog image carousel
- * Creates 10 carousel items with placeholder images/icons
+ * Creates 10 carousel items with dog walking images
  */
 function initializeCarousel() {
     const carouselInner = document.querySelector('#dogCarousel .carousel-inner');
@@ -25,28 +25,51 @@ function initializeCarousel() {
     // Clear existing content
     carouselInner.innerHTML = '';
     
+    // Image descriptions for alt text
+    const imageDescriptions = [
+        'Golden Retriever enjoying a walk in the park',
+        'Professional dog walker with two dogs on leashes',
+        'Happy Labrador running in an open field',
+        'Small dog walking on a forest trail',
+        'Dog walker and Border Collie crossing a bridge',
+        'Beagle exploring a neighborhood path',
+        'Group of dogs on a social walk together',
+        'Husky enjoying an extended walk in nature',
+        'Dog walker giving water to a thirsty dog',
+        'Sunset walk with a happy dog and owner'
+    ];
+    
     // Create 10 carousel items
     for (let i = 1; i <= 10; i++) {
         const isActive = i === 1 ? 'active' : '';
         const item = document.createElement('div');
         item.className = `carousel-item ${isActive}`;
         
-        // In a real implementation, we would use actual dog images
-        // For this demo, we'll use placeholders with different icons
-        const icons = ['dog', 'paw', 'bone', 'heart', 'walking', 'home', 'user-friends', 'map-marker-alt', 'clock', 'star'];
-        const icon = icons[i - 1] || 'dog';
+        // Check if the image exists, otherwise use a placeholder
+        const imgPath = `images/carousel/dog${i}.jpg`;
         
-        item.innerHTML = `
-            <div class="carousel-placeholder">
-                <i class="fas fa-${icon}"></i>
-                <p>Dog Image ${i}</p>
-            </div>
-        `;
+        // Create image element with fallback to placeholder
+        const imgElement = document.createElement('img');
+        imgElement.className = 'carousel-image d-block w-100';
+        imgElement.alt = imageDescriptions[i-1];
+        imgElement.src = imgPath;
         
+        // Add error handler to show placeholder if image doesn't load
+        imgElement.onerror = function() {
+            this.onerror = null; // Prevent infinite loop
+            this.parentNode.innerHTML = `
+                <div class="carousel-placeholder">
+                    <i class="fas fa-dog"></i>
+                    <p>Dog Image ${i}</p>
+                </div>
+            `;
+        };
+        
+        item.appendChild(imgElement);
         carouselInner.appendChild(item);
     }
     
-    console.log('Carousel initialized with 10 placeholder images');
+    console.log('Carousel initialized with dog walking images');
 }
 
 /**
