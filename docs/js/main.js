@@ -46,7 +46,10 @@ function initializeCarousel() {
         item.className = `carousel-item ${isActive}`;
         
         // Check if the image exists, otherwise use a placeholder
-        const imgPath = `images/carousel/dog${i}.jpg`;
+        // Use the correct case for file extensions (dog1.jpg is lowercase, others are uppercase .JPG)
+        const imgPath = i === 1 ? 
+            `images/carousel/dog${i}.jpg` : 
+            `images/carousel/dog${i}.JPG`;
         
         // Create image element with fallback to placeholder
         const imgElement = document.createElement('img');
