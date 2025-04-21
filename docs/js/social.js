@@ -168,19 +168,19 @@ function setupSocialFeed() {
         {
             platform: 'instagram',
             content: 'Beautiful day for a walk with these happy pups! 🐕 #DogWalking #APleasureToWalk',
-            image: 'images/carousel/dog1.jpg',
+            image: 'images/carousel/dog1.jpg', // dog1.jpg is lowercase
             date: '2 days ago'
         },
         {
             platform: 'facebook',
             content: 'Meet our newest group walk member, Bella the Beagle! She\'s already made friends with everyone in the pack.',
-            image: 'images/carousel/dog2.jpg',
+            image: 'images/carousel/dog2.JPG', // Using uppercase JPG extension
             date: '1 week ago'
         },
         {
             platform: 'instagram',
             content: 'Exploring new trails today with our adventure-loving dogs! 🌲 #DogAdventures #HappyDogs',
-            image: 'images/carousel/dog3.jpg',
+            image: 'images/carousel/dog3.JPG', // Using uppercase JPG extension
             date: '2 weeks ago'
         }
     ];
