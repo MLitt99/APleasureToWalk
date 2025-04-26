@@ -180,6 +180,7 @@ function addCalendarStyles() {
         .datepicker-cell.disabled {
             color: #ccc;
             cursor: not-allowed;
+            background-color: #f0f0f0;
         }
         
         .datepicker-cell.selected {
