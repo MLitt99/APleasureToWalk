@@ -155,19 +155,20 @@ function isValidPhone(phone) {
     // Supports formats:
     // - Mobile: 02x xxx xxxx (10 digits starting with 02)
     // - Landline: 0x xxx xxxx (9 digits starting with 0)
+    // - Extended numbers: up to 11 digits for special services
     // - International format: +64 xx xxx xxxx
     
     // Remove spaces, dashes, and parentheses
     const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
     
     // Check for NZ mobile (02x)
-    const mobileRegex = /^02\d{8}$/;
+    const mobileRegex = /^02\d{8,9}$/;
     
-    // Check for NZ landline (0x)
-    const landlineRegex = /^0\d{8}$/;
+    // Check for NZ landline and other numbers (0x)
+    const landlineRegex = /^0\d{8,10}$/;
     
     // Check for international format (+64)
-    const intlRegex = /^\+64\d{8,9}$/;
+    const intlRegex = /^\+64\d{8,10}$/;
     
     return mobileRegex.test(cleanPhone) || landlineRegex.test(cleanPhone) || intlRegex.test(cleanPhone);
 }

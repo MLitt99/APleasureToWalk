@@ -57,6 +57,16 @@ function initializeCalendar() {
                     return false;
                 }
                 
+                // Check if the date is a weekend
+                const dayOfWeek = date.getDay(); // 0 is Sunday, 6 is Saturday
+                if (dayOfWeek === 0 || dayOfWeek === 6) {
+                    return {
+                        enabled: false,
+                        classes: 'weekend',
+                        tooltip: 'No appointments on weekends'
+                    };
+                }
+                
                 // Check if the date has reached the maximum number of bookings
                 const dateString = formatDateForStorage(date);
                 const dateBookings = getBookingsForDate(dateString);
@@ -210,6 +220,13 @@ function addCalendarStyles() {
             background-color: #f0f0f0;
         }
         
+        .datepicker-cell.weekend {
+            background-color: rgba(158, 158, 158, 0.2);
+            border: 1px solid rgba(158, 158, 158, 0.4);
+            color: #999;
+            cursor: not-allowed;
+        }
+        
         .datepicker-cell.available.selected {
             background-color: var(--primary-color);
             color: white;
@@ -254,6 +271,11 @@ function addCalendarStyles() {
         .legend-booked {
             background-color: rgba(244, 67, 54, 0.1);
             border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+        
+        .legend-weekend {
+            background-color: rgba(158, 158, 158, 0.2);
+            border: 1px solid rgba(158, 158, 158, 0.4);
         }
     `;
     
@@ -301,6 +323,10 @@ function createSimpleCalendarUI(container) {
                 <div class="legend-item">
                     <div class="legend-color legend-booked"></div>
                     <span>Fully Booked</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color legend-weekend"></div>
+                    <span>Weekend</span>
                 </div>
             </div>
         </div>
@@ -387,6 +413,13 @@ function createSimpleCalendarUI(container) {
             border: 1px solid rgba(244, 67, 54, 0.3);
             color: #999;
             background-color: #f0f0f0;
+        }
+        
+        .day.weekend {
+            background-color: rgba(158, 158, 158, 0.2);
+            border: 1px solid rgba(158, 158, 158, 0.4);
+            color: #999;
+            cursor: not-allowed;
         }
     `;
     
@@ -504,7 +537,13 @@ function generateCalendarDays(month, year) {
         // Check if date is in the past
         if (date < new Date().setHours(0, 0, 0, 0)) {
             classes += ' disabled';
-        } else {
+        } 
+        // Check if date is a weekend
+        else if (date.getDay() === 0 || date.getDay() === 6) {
+            classes += ' disabled weekend';
+        } 
+        // Check booking status
+        else {
             // Check booking status
             if (dateBookings.length >= 2) {
                 classes += ' fully-booked';
@@ -569,7 +608,10 @@ function initializeBookingForm() {
     }
     
     // Add event listener for proceed button
-    proceedButton.addEventListener('click', function() {
+    proceedButton.addEventListener('click', function(event) {
+        // Prevent default behavior to avoid any potential navigation
+        event.preventDefault();
+        
         // Validate the form one more time
         if (validateBookingForm()) {
             // Show the payment section
@@ -766,6 +808,9 @@ function showPaymentSection() {
     
     // Populate booking summary
     populateBookingSummary();
+    
+    // Scroll to the payment section
+    paymentSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 /**
@@ -940,7 +985,8 @@ function showConfirmation(booking) {
 }
 
 /**
- * Reset the booking form
+ * Reset the booking form for a new booking
+ * Keeps user details but resets date and time selection
  */
 function resetBookingForm() {
     // Get the booking form
@@ -951,8 +997,18 @@ function resetBookingForm() {
         return;
     }
     
-    // Reset the form
-    bookingForm.reset();
+    // Save user details before resetting
+    const ownerName = document.getElementById('owner-name').value;
+    const ownerEmail = document.getElementById('owner-email').value;
+    const ownerPhone = document.getElementById('owner-phone').value;
+    const dogName = document.getElementById('dog-name').value;
+    const dogBreed = document.getElementById('dog-breed').value;
+    const serviceType = document.getElementById('service-type').value;
+    const specialInstructions = document.getElementById('special-instructions').value;
+    
+    // Reset only the date and time fields
+    document.getElementById('booking-date').value = '';
+    document.getElementById('booking-time').value = '';
     
     // Reset selected date
     selectedDate = null;
@@ -961,13 +1017,28 @@ function resetBookingForm() {
     document.getElementById('booking-time').disabled = true;
     
     // Reset availability info
-    document.getElementById('availability-info').innerHTML = '<p>Available slots will be shown after selecting a date.</p>';
+    document.getElementById('availability-info').innerHTML = '<p>Please select a date on the calendar to see available slots.</p>';
     
     // Disable proceed button
     document.getElementById('proceed-to-payment').disabled = true;
     
-    // Reinitialize the calendar
+    // Restore user details
+    document.getElementById('owner-name').value = ownerName;
+    document.getElementById('owner-email').value = ownerEmail;
+    document.getElementById('owner-phone').value = ownerPhone;
+    document.getElementById('dog-name').value = dogName;
+    document.getElementById('dog-breed').value = dogBreed;
+    document.getElementById('service-type').value = serviceType;
+    document.getElementById('special-instructions').value = specialInstructions;
+    
+    // Reinitialize the calendar and scroll to it
     initializeCalendar();
+    
+    // Scroll to the calendar to help the user select a new date
+    const calendarElement = document.getElementById('booking-calendar');
+    if (calendarElement) {
+        calendarElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
 }
 
 /**
