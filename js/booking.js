@@ -194,6 +194,7 @@ function addCalendarStyles() {
         .datepicker-cell.available {
             background-color: rgba(76, 175, 80, 0.1);
             border: 1px solid rgba(76, 175, 80, 0.3);
+            font-weight: bold;
         }
         
         .datepicker-cell.partially-booked {
@@ -205,6 +206,7 @@ function addCalendarStyles() {
             background-color: rgba(244, 67, 54, 0.1);
             border: 1px solid rgba(244, 67, 54, 0.3);
             color: #999;
+            background-color: #f0f0f0;
         }
         
         .datepicker-cell.available.selected {
@@ -371,6 +373,7 @@ function createSimpleCalendarUI(container) {
         .day.available {
             background-color: rgba(76, 175, 80, 0.1);
             border: 1px solid rgba(76, 175, 80, 0.3);
+            font-weight: bold;
         }
         
         .day.partially-booked {
@@ -382,6 +385,7 @@ function createSimpleCalendarUI(container) {
             background-color: rgba(244, 67, 54, 0.1);
             border: 1px solid rgba(244, 67, 54, 0.3);
             color: #999;
+            background-color: #f0f0f0;
         }
     `;
     
@@ -550,6 +554,18 @@ function initializeBookingForm() {
         input.addEventListener('change', validateBookingForm);
         input.addEventListener('input', validateBookingForm);
     });
+    
+    // Add event listener to scroll to calendar when date field is clicked
+    const dateInput = document.getElementById('booking-date');
+    if (dateInput) {
+        dateInput.addEventListener('click', function() {
+            const calendarElement = document.getElementById('booking-calendar');
+            if (calendarElement) {
+                // Scroll to the calendar
+                calendarElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    }
     
     // Add event listener for proceed button
     proceedButton.addEventListener('click', function() {
@@ -784,6 +800,8 @@ function populateBookingSummary() {
         serviceDetails = { name: 'Extended Walk', price: 35 };
     } else if (serviceType === 'group') {
         serviceDetails = { name: 'Group Walk', price: 25 };
+    } else if (serviceType === 'training') {
+        serviceDetails = { name: 'On-Leash Walk Training', price: 150 };
     }
     
     // Get time slot text
@@ -885,6 +903,9 @@ function showConfirmation(booking) {
     } else if (booking.service === 'group') {
         serviceName = 'Group Walk';
         servicePrice = 25;
+    } else if (booking.service === 'training') {
+        serviceName = 'On-Leash Walk Training';
+        servicePrice = 150;
     }
     
     // Get time slot text

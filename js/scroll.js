@@ -52,6 +52,13 @@ function initializeSmoothScrolling() {
                 
                 // Update the active navigation link
                 updateActiveNavLink(targetId);
+                
+                // Close the mobile menu if it's open
+                const navbarCollapse = document.querySelector('.navbar-collapse');
+                if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+                    const bsCollapse = new bootstrap.Collapse(navbarCollapse);
+                    bsCollapse.hide();
+                }
             }
         });
     });

@@ -255,6 +255,8 @@ function getServicePrice(serviceType) {
             return 35;
         case 'group':
             return 25;
+        case 'training':
+            return 150;
         default:
             return 0;
     }
