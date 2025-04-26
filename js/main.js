@@ -111,9 +111,9 @@ function initializeAnimations() {
  * @returns {string} Formatted currency string
  */
 function formatCurrency(amount) {
-    return new Intl.NumberFormat('en-US', {
+    return new Intl.NumberFormat('en-NZ', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'NZD',
         minimumFractionDigits: 2
     }).format(amount);
 }
@@ -124,7 +124,7 @@ function formatCurrency(amount) {
  * @returns {string} Formatted date string
  */
 function formatDate(date) {
-    return new Intl.DateTimeFormat('en-US', {
+    return new Intl.DateTimeFormat('en-NZ', {
         weekday: 'long',
         year: 'numeric',
         month: 'long',
@@ -148,9 +148,25 @@ function isValidEmail(email) {
  * @returns {boolean} Whether the phone number is valid
  */
 function isValidPhone(phone) {
-    // Basic validation for US phone numbers
-    const regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
-    return regex.test(phone);
+    // Validation for New Zealand phone numbers
+    // Supports formats:
+    // - Mobile: 02x xxx xxxx (10 digits starting with 02)
+    // - Landline: 0x xxx xxxx (9 digits starting with 0)
+    // - International format: +64 xx xxx xxxx
+    
+    // Remove spaces, dashes, and parentheses
+    const cleanPhone = phone.replace(/[\s\-\(\)]/g, '');
+    
+    // Check for NZ mobile (02x)
+    const mobileRegex = /^02\d{8}$/;
+    
+    // Check for NZ landline (0x)
+    const landlineRegex = /^0\d{8}$/;
+    
+    // Check for international format (+64)
+    const intlRegex = /^\+64\d{8,9}$/;
+    
+    return mobileRegex.test(cleanPhone) || landlineRegex.test(cleanPhone) || intlRegex.test(cleanPhone);
 }
 
 /**

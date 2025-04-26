@@ -42,12 +42,15 @@ function initializeStripe() {
     }
     
     try {
-        // Initialize Stripe with a test publishable key
+        // Initialize Stripe with a test publishable key for NZD payments
         // In a real implementation, this would be your actual Stripe publishable key
-        stripe = Stripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+        stripe = Stripe('pk_test_51NZDTestKeyForNewZealandxyz');
         
-        // Create Stripe Elements
-        const elements = stripe.elements();
+        // Create Stripe Elements with NZD currency
+        const elements = stripe.elements({
+            locale: 'en-NZ',
+            currency: 'nzd'
+        });
         
         // Create and mount the Card Element
         cardElement = elements.create('card', {
@@ -277,14 +280,27 @@ function createPaymentMethod() {
         return Promise.reject(new Error('Payment system not initialized'));
     }
     
+    // Get form values
+    const ownerName = document.getElementById('owner-name').value;
+    const ownerEmail = document.getElementById('owner-email').value;
+    const ownerPhone = document.getElementById('owner-phone').value;
+    
     // Create a payment method with the card element
     return stripe.createPaymentMethod({
         type: 'card',
         card: cardElement,
         billing_details: {
-            name: document.getElementById('owner-name').value,
-            email: document.getElementById('owner-email').value,
-            phone: document.getElementById('owner-phone').value
+            name: ownerName,
+            email: ownerEmail,
+            phone: ownerPhone,
+            address: {
+                country: 'NZ',
+                // In a real implementation, you would collect these address fields
+                // postal_code: document.getElementById('postal-code').value,
+                // line1: document.getElementById('address-line1').value,
+                // city: document.getElementById('city').value,
+                // state: document.getElementById('region').value
+            }
         }
     });
 }
@@ -323,8 +339,8 @@ function createDemoCreditCardInput() {
             </div>
             <div class="form-row">
                 <div class="col-12">
-                    <label for="demo-card-zip">ZIP Code</label>
-                    <input type="text" id="demo-card-zip" class="form-control" placeholder="ZIP Code" maxlength="5">
+                    <label for="demo-card-zip">Postcode</label>
+                    <input type="text" id="demo-card-zip" class="form-control" placeholder="Postcode (e.g., 1010)" maxlength="4">
                 </div>
             </div>
         </div>
